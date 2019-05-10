@@ -10,4 +10,4 @@ editor_options:
 
 Welcome to my research website.
 
-Single cell workshop: [link](analysis.nb.html) 
+Single cell workshop: [link](./analysis/analysis.html) 
