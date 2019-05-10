@@ -22,7 +22,6 @@ A lightly adapted and annotated version of Satija et al, [Guided Clustering Tuto
 
 This tutorial covers the standard steps of QC, pre-processing and selecting features (genes), reducing the dimensionality of your dataset, clustering cells, and finding differentially expressed features. 
 Seurat has many other tools, notably for integrating different datasets, which other presenters will cover today.
-**We will run through the code interactively**
 
 Download the script for this tutorial at [github](https://github.com/JonThom/190510-scWorkshop/blob/master/analysis/analysis.Rmd)
 
@@ -303,7 +302,7 @@ Repeat 1 and 2 (200 times or more), then
 
 ```{r}
 # NOT RUN
-pbmc <- JackStraw(pbmc, # TODO: this is for demonstration purposes, replace with 'pbmc'
+pbmc <- JackStraw(pbmc, 
                   num.replicate = 100)
 ```
 
