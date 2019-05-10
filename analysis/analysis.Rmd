@@ -267,7 +267,7 @@ Seurat provides three approaches to selecting the number of PCs:
 
 1. Select PCs based on whether interesting genes score highly on them (supervised)
 2. `JackStraw`: use a statistical test based on a random null model to determine which PCs capture 'real' variation versus noise. Time-consuming but unsupervised and rigourous.
-3. `ElbowPlot`: Use an elbbow plot to select PCs that explain most of the variance in the dataset. A fast heuristic that is commonly used. 
+3. `ElbowPlot`: Use an elbow plot to select PCs that explain most of the variance in the dataset. A fast heuristic that is commonly used. 
 
 ### Select PCs based on interesting genes
 
@@ -295,9 +295,8 @@ For each gene
 2. Compare the PCA scores for the 'random' genes with the observed PCA scores to obtain a p-value for each gene's association with each principal component. 
 
 ```{r}
-# NOT RUN
 pbmc <- JackStraw(pbmc, 
-                  num.replicate = 100)
+                  num.replicate = 200)
 ```
 
 3. Use the p-values for each gene per PC to perform a proportion test comparing the number of features with a p-value below a particular threshold (score.thresh), compared with the proportion of features expected under a uniform distribution of p-values. This gives a p-value for each principal component.
@@ -332,11 +331,11 @@ We chose 10 here, but consider the following:
 
 ## Cluster the cells
 
-Seurat v3 applies a graph-based clustering approach, building upon initial strategies in ([Macosko et al](http://www.cell.com/abstract/S0092-8674(15)00549-8)). Importantly, the distance metric which drives the clustering analysis (based on previously identified PCs) remains the same. However, our approach to partioning the cellular distance matrix into clusters has dramatically improved. Our approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data [SNN-Cliq, Xu and Su, Bioinformatics, 2015](http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract) and CyTOF data [PhenoGraph, Levine et al., Cell, 2015](http://www.ncbi.nlm.nih.gov/pubmed/26095251). Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.
+Seurat v3 applies a graph-based clustering approach, building upon initial strategies in ([Macosko et al](http://www.cell.com/abstract/S0092-8674(15)00549-8)). Importantly, the distance metric which drives the clustering analysis (based on previously identified PCs) remains the same as in previous Seurat versions. However, the approach to partioning the cellular distance matrix into clusters has dramatically improved. The approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data [SNN-Cliq, Xu and Su, Bioinformatics, 2015](http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract) and CyTOF data [PhenoGraph, Levine et al., Cell, 2015](http://www.ncbi.nlm.nih.gov/pubmed/26095251). Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.
 
 As in `PhenoGraph`, we first construct a KNN graph based on the euclidean distance in PCA space, and refine the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccard similarity). This step is performed using the `FindNeighbors` function, and takes as input the previously defined dimensionality of the dataset (first 10 PCs).
 
-To cluster the cells, we next apply modularity optimization techniques such as the Louvain algorithm (default) or SLM [SLM, Blondel et al., Journal of Statistical Mechanics](http://dx.doi.org/10.1088/1742-5468/2008/10/P10008), to iteratively group cells together, with the goal of optimizing the standard modularity function. 
+To cluster the cells, Seurat then applies modularity optimization techniques such as the Louvain algorithm (default) or SLM [SLM, Blondel et al., Journal of Statistical Mechanics](http://dx.doi.org/10.1088/1742-5468/2008/10/P10008), to iteratively group cells together, with the goal of optimizing the standard modularity function. 
 
 The `FindClusters` function, which implements this procedure, contains a `resolution` parameter that sets the ‘granularity’ of the downstream clustering, with increased values leading to a greater number of clusters. 
 
@@ -394,7 +393,7 @@ Seurat can help you find markers that define clusters via differential expressio
 
 FindAllMarkers automates this process for all clusters, but you can also test groups of clusters vs. each other, or against all cells.
 
-Seurat has several tests for differential expression which can be set with the test.use parameter (see our [DE vignette](http://satijalab01.nygenome.org/seurat/v3.0/de_vignette.html) for details).
+Seurat has several tests for differential expression which can be set with the test.use parameter (see the Seurat [DE vignette](http://satijalab01.nygenome.org/seurat/v3.0/de_vignette.html) for details).
 
 Note that: 
 
@@ -410,7 +409,7 @@ cluster1.markers <- FindMarkers(pbmc,
                                 ident.1 = 1, 
                                 test.use  ="wilcox",
                                 only.pos = T,
-                                max.cells.per.ident=250,
+                                max.cells.per.ident=500,
                                 random.seed=randomSeed,
                                 min.pct = 0.25)
 head(cluster1.markers, n = 5)
@@ -423,7 +422,7 @@ cluster5.markers <- FindMarkers(pbmc,
                                 ident.2 = c(0, 3), 
                                 test.use  ="wilcox",
                                 only.pos = T,
-                                max.cells.per.ident=250,
+                                max.cells.per.ident=500,
                                 random.seed=randomSeed,
                                 min.pct = 0.25)
 head(cluster5.markers, n = 5)
@@ -435,7 +434,7 @@ pbmc.markers <- FindAllMarkers(pbmc,
                                test.use="wilcox",
                                only.pos = TRUE, 
                                min.pct = 0.25, 
-                               max.cells.per.ident=250,
+                               max.cells.per.ident=500,
                                random.seed=randomSeed,
                                logfc.threshold = 0.25)
 
