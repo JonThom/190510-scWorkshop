@@ -61,9 +61,10 @@ For this tutorial, we will be analyzing the a dataset of Peripheral Blood Mononu
 Seurat takes as input a gene (row) * cell (column) matrix of transcript counts.
 
 The `Read10X` function reads in the output of the [cellranger](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger) pipeline from 10X, returning a unique molecular identified (UMI) count matrix. 
+
 Seurat also provides the function `ReadAlevin` for loading the binary format matrix produced by the [Alevin tool from the Salmon software](https://salmon.readthedocs.io/en/latest/alevin.html).
 
-* Before loading the filtered matrix, you should inspect the `Cell Ranger` outputs carefully to see if the cut for calling barcodes as cells seems reasonable. If not, consider using the unfiltered matrix and filtering manually e.g. on a minimum number of RNA counts per cell.
+* Before loading the filtered matrix, you should be confident that previous filtering steps were sound. If using `Cell Ranger`, inspect the outputs carefully to see if the cut for calling barcodes as cells seems reasonable. If not, consider using the unfiltered matrix and filtering manually e.g. on a minimum number of RNA counts per cell.
 
 ```{r}
 # Load the PBMC dataset
@@ -99,16 +100,12 @@ pbmc@assays$RNA@counts[0:5,0:3]
 
 For a technical discussion of the Seurat object structure, check out the [GitHub Wiki](https://github.com/satijalab/seurat/wiki). 
 
-# Standard pre-processing workflow
+# QC and normalization
 
-1. filter cells based on QC metrics
-2. normalize the raw counts
-3. identify highly variable features
-4. scale and center the data
-
-## Select and filter cells based on QC metrics
+## Standard pre-processing workflow: filter cells based on QC metrics
 
 Seurat allows you to easily explore QC metrics and filter cells based on _any_ user-defined criteria. 
+
 A few QC metrics [commonly used](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4758103/) by the community include
 
 * The number of unique genes or molecules detected in each cell.
@@ -159,7 +156,7 @@ pbmc <- subset(pbmc,
 head(pbmc@meta.data)
 ```
 
-## logNormalize the raw counts
+## LogNormalize the raw counts
 
 After removing unwanted cells from the dataset, the next step is to normalize the data. 
 
@@ -167,7 +164,6 @@ By default, we employ a global-scaling normalization method `LogNormalize` that
 
 1. normalizes the feature expression measurements for each cell by the total number of counts within the cell and scales this by a common factor (10,000 by default) corresponding to the expected number of reads in a cell
     * assumption: differences in total number of RNA are due to more varying sampling depth than to biology.
-    * some methods for computing differential expression use raw counts
 2. adds 1 and log-transforms (natural log) the result. 
     * assumption: raw counts are highly skewed to the right and log brings them closer to Normality, which is useful for PCA and statistical tests.
     
@@ -185,17 +181,13 @@ pbmc@assays$RNA@data[10000:10005,0:3]
 
 We next calculate a subset of features that exhibit high cell-to-cell variation in the dataset (i.e, they are highly expressed in some cells, and lowly expressed in others). Satija et al and [others](https://www.nature.com/articles/nmeth.2645) have found that focusing on these genes in downstream analysis helps to highlight biological signal in single-cell datasets.
 
-_The problem is that gene expression variance tends to correlate highly with the mean expression of that gene_
+_Problem: gene expression variance tends to correlate highly with the mean expression, leading to a bias towards selecting highly expressed genes_
 
 **Variance Stabilizing Transformation (vst)**: 
 
 * The procedure in Seurat3 is described in detail [here](https://www.biorxiv.org/content/early/2018/11/02/460147.full.pdf)
 * The method fits a line to the relationship of log(variance) and log(mean) across all genes using local polynomial regression (loess). Then standardizes each gene's variance using the observed mean and expected variance (given by the fitted line). To reduce the impact of technical outliers, we clip the standardized values to a maximum value (clip.max).
 * This method returns the number of genes requested (default 2000)
-
-<!-- * **mean.var.plot**:  -->
-<!--     * First, uses a function to calculate average expression (mean.function) and dispersion (dispersion.function) for each feature. Next, divides features into num.bin (deafult 20) bins based on their average expression, and calculates z-scores for dispersion within each bin. The purpose of this is to identify variable features while controlling for the strong relationship between variability and average expression.  -->
-<!--     * A practical advantage is that this method has a hard-coded z-score cutoff, which frees the user from setting an arbitrary number of variable genes -->
 
 ```{r, fig.width = 12, fig.height = 4}
 pbmc <- FindVariableFeatures(pbmc, 
@@ -215,7 +207,8 @@ CombinePlots(plots = list(plot1, plot2))
 
 ## Scale and center the data 
 
-Next, as a standard pre-processing step prior to dimensional reduction techniques like PCA, we center and scale each gene's expression, 
+Next, as a standard pre-processing step prior to dimensional reduction techniques like PCA, we center and scale each gene's expression
+
 * This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate.
 
 In addition, the ScaleData function optionally also 'regresses out' effects of given confounders, such as the number of RNA molecules or the proportion of mitochrondrial RNA [Hafemeister (2017)](https://www.biorxiv.org/content/10.1101/576827v2). However one should proceed with caution, in case the 'confounder' is correlated with biological variables of interest.
@@ -223,6 +216,7 @@ In addition, the ScaleData function optionally also 'regresses out' effects of g
 The results of this are stored in `pbmc@assays$RNA@scale.data`
 
 Note:
+
 * Scaling only makes sense as pre-processing for Principal Component Analysis (PCA); for other analysis continue to use LogNormalized data (`pbmc@assays$RNA@data`) or raw counts (`pbmc@assays$RNA@counts`)
 
 ```{r}
@@ -233,13 +227,15 @@ pbmc <- ScaleData(pbmc,
 pbmc@assays$RNA@scale.data[0:5,0:3]
 ```
 
-* **Contrary to the documentation** (see `?ScaleData`), the function by default scales only highly variable genes
+* _Contrary to the documentation_ (see `?ScaleData`), the function by default scales only highly variable genes
 
 ```{r}
 dim(pbmc@assays$RNA@scale.data)
 ```
 
 If you wish to use all genes for PCA, pass the argument `features = rownames(pbmc)`
+
+# Dimensionality reduction and clustering
 
 ## Perform linear dimensional reduction
 
@@ -295,12 +291,8 @@ In [Macosko et al](http://www.cell.com/abstract/S0092-8674(15)00549-8) the autho
 
 For each gene
 
-1. Randomly ‘scramble’ the gene's scores across cells a number
-2. Calculate projected PCA loadings for these 'scambled' genes. 
-
-Repeat 1 and 2 (200 times or more), then 
-
-3. Compare the PCA scores for the 'random' genes with the observed PCA scores to obtain a p-value for each gene's association with each principal component. 
+1. Randomly ‘scramble’ the gene's scores across cells and calculate projected PCA loadings for these 'scambled' genes. Do this many (200+) times.
+2. Compare the PCA scores for the 'random' genes with the observed PCA scores to obtain a p-value for each gene's association with each principal component. 
 
 ```{r}
 # NOT RUN
@@ -308,7 +300,7 @@ pbmc <- JackStraw(pbmc,
                   num.replicate = 100)
 ```
 
-4. Use the p-values for each gene per PC to perform a proportion test comparing the number of features with a p-value below a particular threshold (score.thresh), compared with the proportion of features expected under a uniform distribution of p-values. This gives a p-value for each principal component.
+3. Use the p-values for each gene per PC to perform a proportion test comparing the number of features with a p-value below a particular threshold (score.thresh), compared with the proportion of features expected under a uniform distribution of p-values. This gives a p-value for each principal component.
 
 ```{r}
 pbmc <- ScoreJackStraw(pbmc, 
@@ -329,7 +321,7 @@ JackStrawPlot(pbmc, dims = 1:15)
 ElbowPlot(pbmc)
 ```
 
- In this example, all three approaches yielded similar results, but we might have been justified in choosing anything between PC 7-12 as a cutoff.
+In this example, all three approaches yielded similar results, but we might have been justified in choosing anything between PC 7-12 as a cutoff.
 
 We chose 10 here, but consider the following:
 
@@ -347,6 +339,7 @@ As in `PhenoGraph`, we first construct a KNN graph based on the euclidean distan
 To cluster the cells, we next apply modularity optimization techniques such as the Louvain algorithm (default) or SLM [SLM, Blondel et al., Journal of Statistical Mechanics](http://dx.doi.org/10.1088/1742-5468/2008/10/P10008), to iteratively group cells together, with the goal of optimizing the standard modularity function. 
 
 The `FindClusters` function, which implements this procedure, contains a `resolution` parameter that sets the ‘granularity’ of the downstream clustering, with increased values leading to a greater number of clusters. 
+
 * Setting this parameter between 0.4-1.2 typically returns good results for single-cell datasets of around 3K cells. Optimal resolution often increases for larger datasets. 
 
 ```{r}
@@ -367,12 +360,15 @@ head(Idents(pbmc), 5)
 ## Run non-linear dimensional reduction (UMAP/tSNE)
 
 Seurat offers several non-linear dimensional reduction techniques to visualize and explore these datasets, including
+
 * t-distributed Stochastic Neighbour Embedding (t-SNE) 
 * Uniform Manifold Approximation and Projection (UMAP)
 
-* As input to the UMAP and tSNE, use the same PCs as used for the clustering analysis (here, the first 10) 
-* For tSNE, the `perplexity` parameter (defaults to 30) has a large impact on the final plot. For a great discussion see [Watternberg et al, 2016](https://distill.pub/2016/misread-tsne/)
-* As with RunPCA, specifying seed.use makes the reduction reproducible
+As input to the UMAP and tSNE, use the same PCs as used for the clustering analysis (here, the first 10) 
+
+For tSNE, the `perplexity` parameter (defaults to 30) has a large impact on the final plot. For a great discussion see [Watternberg et al, 2016](https://distill.pub/2016/misread-tsne/)
+
+As with RunPCA, specifying seed.use makes the reduction reproducible
 
 ```{r}
 # use tSNE because UMAP isn't installed :)
@@ -390,6 +386,8 @@ DimPlot(pbmc,
         reduction = "tsne")
 ```
 
+# Biological analysis
+
 ## Finding differentially expressed features (cluster biomarkers)
 
 Seurat can help you find markers that define clusters via differential expression. 
@@ -399,6 +397,7 @@ FindAllMarkers automates this process for all clusters, but you can also test gr
 Seurat has several tests for differential expression which can be set with the test.use parameter (see our [DE vignette](http://satijalab01.nygenome.org/seurat/v3.0/de_vignette.html) for details).
 
 Note that: 
+
 * By default, unless you specify otherwise `FindClusters` identifies positive _and negative markers_ of a single cluster (specified in ident.1), compared to all other cells
 * The min.pct argument requires a feature to be detected at a minimum percentage in either of the two groups of cells
 * The thresh.test argument requires a feature to be differentially expressed (on average) by some amount between the two groups. 
@@ -444,6 +443,7 @@ pbmc.markers %>% group_by(cluster) %>% top_n(n = 2, wt = avg_logFC)
 ```
 
 Seurat includes several tools for visualizing marker expression. 
+
 * `VlnPlot` shows expression probability distributions across clusters
 * `FeaturePlot` visualizes feature expression on a tSNE or PCA plot
 * `RidgePlot` draws a ridge plot of gene expression, metrics, PC scores, etc.
@@ -471,11 +471,14 @@ pbmc <- RenameIdents(pbmc, new.cluster.ids)
 DimPlot(pbmc, reduction = "tsne", label = TRUE, label.size = 5, pt.size = 0.5) + NoLegend()
 ```
 
+# Wrap up 
+
 Save the final seurat object to disk
 
 ```{r}
 if (F) saveRDS(pbmc, file = "../output/pbmc3k_final.rds")
 ```
 
-# Additional material
+### Additional material
+
 [Satija group website](https://satijalab.org/seurat/) - for more tutorials and articles
