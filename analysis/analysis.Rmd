@@ -21,6 +21,7 @@ A lightly adapted and annotated version of Satija et al, [Guided Clustering Tuto
 * There are great tutorials available on [Satija group website](https://github.com/satijalab/seurat)
 
 This tutorial covers the standard steps of QC, pre-processing and selecting features (genes), reducing the dimensionality of your dataset, clustering cells, and finding differentially expressed features. 
+
 Seurat has many other tools, notably for integrating different datasets, which other presenters will cover today.
 
 Download the script for this tutorial at [github](https://github.com/JonThom/190510-scWorkshop/blob/master/analysis/analysis.Rmd)
@@ -186,7 +187,8 @@ We next calculate a subset of features that exhibit high cell-to-cell variation 
 
 _The problem is that gene expression variance tends to correlate highly with the mean expression of that gene_
 
-**Variance Stabilizing Transformation (vst)**:  
+**Variance Stabilizing Transformation (vst)**: 
+
 * The procedure in Seurat3 is described in detail [here](https://www.biorxiv.org/content/early/2018/11/02/460147.full.pdf)
 * The method fits a line to the relationship of log(variance) and log(mean) across all genes using local polynomial regression (loess). Then standardizes each gene's variance using the observed mean and expected variance (given by the fitted line). To reduce the impact of technical outliers, we clip the standardized values to a maximum value (clip.max).
 * This method returns the number of genes requested (default 2000)
