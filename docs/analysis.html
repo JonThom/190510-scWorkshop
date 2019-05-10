@@ -318,7 +318,7 @@ div.section {
 
 <h1 class="title toc-ignore">Single cell data analysis workshop</h1>
 <h4 class="author"><em>Jon Thompson, Pers lab</em></h4>
-<h4 class="date"><em>2019-05-10 08:39:00</em></h4>
+<h4 class="date"><em>2019-05-10 09:02:27</em></h4>
 
 </div>
 
@@ -422,10 +422,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree9934dbb7a145a3df0ed4260467d576575342bfb3targetblank9934dbba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/JonThom/190510-scWorkshop/tree/9934dbb7a145a3df0ed4260467d576575342bfb3" target="_blank">9934dbb</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree080696fe55c4b9534e25233614e1941d2a18f224targetblank080696fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/JonThom/190510-scWorkshop/tree/080696fe55c4b9534e25233614e1941d2a18f224" target="_blank">080696f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree9934dbb7a145a3df0ed4260467d576575342bfb3targetblank9934dbba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree080696fe55c4b9534e25233614e1941d2a18f224targetblank080696fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -435,6 +435,9 @@ Untracked files:
     Untracked:  data/filtered_gene_bc_matrices/
     Untracked:  data/pbmc3k_filtered_gene_bc_matrices.tar.gz
     Untracked:  output/seu_pbmc_tutorial.rds
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -473,6 +476,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/JonThom/190510-scWorkshop/blob/080696fe55c4b9534e25233614e1941d2a18f224/analysis/analysis.Rmd" target="_blank">080696f</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+<td>
+wflow_publish(“./analysis/analysis.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/JonThom/190510-scWorkshop/7c8ff3e04ab986873509ce7ee7ed8bb6da84e31a/docs/analysis.html" target="_blank">7c8ff3e</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -627,7 +664,7 @@ add first analysis file
 </ul></li>
 <li>There are great tutorials available on <a href="https://github.com/satijalab/seurat">Satija group website</a></li>
 </ul>
-<p>This tutorial covers the standard steps of QC, pre-processing and selecting features (genes), reducing the dimensionality of your dataset, clustering cells, and finding differentially expressed features. Seurat has many other tools, notably for integrating different datasets, which other presenters will cover today. <strong>We will run through the code interactively</strong></p>
+<p>This tutorial covers the standard steps of QC, pre-processing and selecting features (genes), reducing the dimensionality of your dataset, clustering cells, and finding differentially expressed features. Seurat has many other tools, notably for integrating different datasets, which other presenters will cover today.</p>
 <p>Download the script for this tutorial at <a href="https://github.com/JonThom/190510-scWorkshop/blob/master/analysis/analysis.Rmd">github</a></p>
 <div id="set-up" class="section level1">
 <h1>Set up</h1>
@@ -1118,7 +1155,7 @@ JonThom
 <li>Compare the PCA scores for the ‘random’ genes with the observed PCA scores to obtain a p-value for each gene’s association with each principal component.</li>
 </ol>
 <pre class="r"><code># NOT RUN
-pbmc &lt;- JackStraw(pbmc, # TODO: this is for demonstration purposes, replace with &#39;pbmc&#39;
+pbmc &lt;- JackStraw(pbmc, 
                   num.replicate = 100)</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>Use the p-values for each gene per PC to perform a proportion test comparing the number of features with a p-value below a particular threshold (score.thresh), compared with the proportion of features expected under a uniform distribution of p-values. This gives a p-value for each principal component.</li>
