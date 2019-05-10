@@ -24,7 +24,7 @@ This tutorial covers the standard steps of QC, pre-processing and selecting feat
 Seurat has many other tools, notably for integrating different datasets, which other presenters will cover today.
 **We will run through the code interactively**
 
-Download the html and script for this tutorial at [github](https://github.com/JonThom/190510-scWorkshop)
+Download the script for this tutorial at [github](https://github.com/JonThom/190510-scWorkshop/blob/master/analysis/analysis.Rmd)
 
 # Set up 
 
