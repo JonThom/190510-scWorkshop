@@ -318,7 +318,7 @@ div.section {
 
 <h1 class="title toc-ignore">Single cell data analysis workshop</h1>
 <h4 class="author"><em>Jon Thompson, Pers lab</em></h4>
-<h4 class="date"><em>2019-05-10 11:22:18</em></h4>
+<h4 class="date"><em>2019-05-10 11:53:46</em></h4>
 
 </div>
 
@@ -422,10 +422,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree9b77751413f883f8f324be34da689f8a667f1469targetblank9b77751a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/JonThom/190510-scWorkshop/tree/9b77751413f883f8f324be34da689f8a667f1469" target="_blank">9b77751</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptreec43c860e50f1f5aa8c57e308265f41d38402e534targetblankc43c860a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/JonThom/190510-scWorkshop/tree/c43c860e50f1f5aa8c57e308265f41d38402e534" target="_blank">c43c860</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree9b77751413f883f8f324be34da689f8a667f1469targetblank9b77751a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptreec43c860e50f1f5aa8c57e308265f41d38402e534targetblankc43c860a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -473,6 +473,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/JonThom/190510-scWorkshop/blob/c43c860e50f1f5aa8c57e308265f41d38402e534/analysis/analysis.Rmd" target="_blank">c43c860</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+<td>
+wflow_publish(“./analysis/analysis.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/JonThom/190510-scWorkshop/8e266424e41b82584fb463fdaaf8372ebd8a54f0/docs/analysis.html" target="_blank">8e26642</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1198,7 +1232,7 @@ JonThom
 <ol style="list-style-type: decimal">
 <li>Select PCs based on whether interesting genes score highly on them (supervised)</li>
 <li><code>JackStraw</code>: use a statistical test based on a random null model to determine which PCs capture ‘real’ variation versus noise. Time-consuming but unsupervised and rigourous.</li>
-<li><code>ElbowPlot</code>: Use an elbbow plot to select PCs that explain most of the variance in the dataset. A fast heuristic that is commonly used.</li>
+<li><code>ElbowPlot</code>: Use an elbow plot to select PCs that explain most of the variance in the dataset. A fast heuristic that is commonly used.</li>
 </ol>
 <div id="select-pcs-based-on-interesting-genes" class="section level3">
 <h3>Select PCs based on interesting genes</h3>
@@ -1294,9 +1328,8 @@ JonThom
 <li>Randomly ‘scramble’ the gene’s scores across cells and calculate projected PCA loadings for these ‘scambled’ genes. Do this many (200+) times.</li>
 <li>Compare the PCA scores for the ‘random’ genes with the observed PCA scores to obtain a p-value for each gene’s association with each principal component.</li>
 </ol>
-<pre class="r"><code># NOT RUN
-pbmc &lt;- JackStraw(pbmc, 
-                  num.replicate = 100)</code></pre>
+<pre class="r"><code>pbmc &lt;- JackStraw(pbmc, 
+                  num.replicate = 200)</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>Use the p-values for each gene per PC to perform a proportion test comparing the number of features with a p-value below a particular threshold (score.thresh), compared with the proportion of features expected under a uniform distribution of p-values. This gives a p-value for each principal component.</li>
 </ol>
@@ -1304,7 +1337,7 @@ pbmc &lt;- JackStraw(pbmc,
                        dims = 1:20)</code></pre>
 <p>The <code>JackStrawPlot</code> function provides a visualization tool for comparing the distribution of p-values for each PC with a uniform distribution (dashed line). ‘Significant’ PCs will show a strong enrichment of features with low p-values (solid curve above the dashed line). In this case it appears that there is a sharp drop-off in significance after the first 10-12 PCs.</p>
 <pre class="r"><code>JackStrawPlot(pbmc, dims = 1:15)</code></pre>
-<pre><code>Warning: Removed 23369 rows containing missing values (geom_point).</code></pre>
+<pre><code>Warning: Removed 23405 rows containing missing values (geom_point).</code></pre>
 <p><img src="figure/analysis.Rmd/unnamed-chunk-23-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-23-1">
@@ -1400,9 +1433,9 @@ JonThom
 </div>
 <div id="cluster-the-cells" class="section level2">
 <h2>Cluster the cells</h2>
-<p>Seurat v3 applies a graph-based clustering approach, building upon initial strategies in (<a href="http://www.cell.com/abstract/S0092-8674(15)00549-8">Macosko et al</a>). Importantly, the distance metric which drives the clustering analysis (based on previously identified PCs) remains the same. However, our approach to partioning the cellular distance matrix into clusters has dramatically improved. Our approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data <a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and CyTOF data <a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a>. Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.</p>
+<p>Seurat v3 applies a graph-based clustering approach, building upon initial strategies in (<a href="http://www.cell.com/abstract/S0092-8674(15)00549-8">Macosko et al</a>). Importantly, the distance metric which drives the clustering analysis (based on previously identified PCs) remains the same as in previous Seurat versions. However, the approach to partioning the cellular distance matrix into clusters has dramatically improved. The approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data <a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and CyTOF data <a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a>. Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.</p>
 <p>As in <code>PhenoGraph</code>, we first construct a KNN graph based on the euclidean distance in PCA space, and refine the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccard similarity). This step is performed using the <code>FindNeighbors</code> function, and takes as input the previously defined dimensionality of the dataset (first 10 PCs).</p>
-<p>To cluster the cells, we next apply modularity optimization techniques such as the Louvain algorithm (default) or SLM <a href="http://dx.doi.org/10.1088/1742-5468/2008/10/P10008">SLM, Blondel et al., Journal of Statistical Mechanics</a>, to iteratively group cells together, with the goal of optimizing the standard modularity function.</p>
+<p>To cluster the cells, Seurat then applies modularity optimization techniques such as the Louvain algorithm (default) or SLM <a href="http://dx.doi.org/10.1088/1742-5468/2008/10/P10008">SLM, Blondel et al., Journal of Statistical Mechanics</a>, to iteratively group cells together, with the goal of optimizing the standard modularity function.</p>
 <p>The <code>FindClusters</code> function, which implements this procedure, contains a <code>resolution</code> parameter that sets the ‘granularity’ of the downstream clustering, with increased values leading to a greater number of clusters.</p>
 <ul>
 <li>Setting this parameter between 0.4-1.2 typically returns good results for single-cell datasets of around 3K cells. Optimal resolution often increases for larger datasets.</li>
@@ -1505,7 +1538,7 @@ JonThom
 <h2>Finding differentially expressed features (cluster biomarkers)</h2>
 <p>Seurat can help you find markers that define clusters via differential expression.</p>
 <p>FindAllMarkers automates this process for all clusters, but you can also test groups of clusters vs. each other, or against all cells.</p>
-<p>Seurat has several tests for differential expression which can be set with the test.use parameter (see our <a href="http://satijalab01.nygenome.org/seurat/v3.0/de_vignette.html">DE vignette</a> for details).</p>
+<p>Seurat has several tests for differential expression which can be set with the test.use parameter (see the Seurat <a href="http://satijalab01.nygenome.org/seurat/v3.0/de_vignette.html">DE vignette</a> for details).</p>
 <p>Note that:</p>
 <ul>
 <li>By default, unless you specify otherwise <code>FindClusters</code> identifies positive <em>and negative markers</em> of a single cluster (specified in ident.1), compared to all other cells</li>
@@ -1518,38 +1551,38 @@ cluster1.markers &lt;- FindMarkers(pbmc,
                                 ident.1 = 1, 
                                 test.use  =&quot;wilcox&quot;,
                                 only.pos = T,
-                                max.cells.per.ident=250,
+                                max.cells.per.ident=500,
                                 random.seed=randomSeed,
                                 min.pct = 0.25)
 head(cluster1.markers, n = 5)</code></pre>
-<pre><code>              p_val avg_logFC pct.1 pct.2    p_val_adj
-S100A9 4.998348e-86  3.854759 0.996 0.217 6.854735e-82
-S100A8 4.256255e-85  3.796943 0.973 0.124 5.837028e-81
-LYZ    1.681689e-81  3.143552 1.000 0.518 2.306268e-77
-LGALS2 6.584607e-76  2.634321 0.907 0.061 9.030130e-72
-FCN1   2.484055e-72  2.335357 0.952 0.153 3.406633e-68</code></pre>
+<pre><code>               p_val avg_logFC pct.1 pct.2     p_val_adj
+S100A8 1.720457e-165  3.796943 0.973 0.124 2.359435e-161
+S100A9 3.451515e-165  3.854759 0.996 0.217 4.733407e-161
+LYZ    3.362404e-160  3.143552 1.000 0.518 4.611201e-156
+LGALS2 7.494708e-151  2.634321 0.907 0.061 1.027824e-146
+TYROBP 3.918747e-147  2.100770 0.994 0.267 5.374170e-143</code></pre>
 <pre class="r"><code># find all markers distinguishing cluster 5 from clusters 0 and 3
 cluster5.markers &lt;- FindMarkers(pbmc, 
                                 ident.1 = 5, 
                                 ident.2 = c(0, 3), 
                                 test.use  =&quot;wilcox&quot;,
                                 only.pos = T,
-                                max.cells.per.ident=250,
+                                max.cells.per.ident=500,
                                 random.seed=randomSeed,
                                 min.pct = 0.25)
 head(cluster5.markers, n = 5)</code></pre>
-<pre><code>              p_val avg_logFC pct.1 pct.2    p_val_adj
-TYROBP 4.755568e-77  3.239007 1.000 0.133 6.521786e-73
-FCER1G 2.124871e-76  3.286471 1.000 0.101 2.914048e-72
-FCGR3A 8.797046e-76  2.901285 0.969 0.047 1.206427e-71
-LST1   8.597783e-75  3.310554 1.000 0.164 1.179100e-70
-AIF1   5.072484e-74  2.851443 1.000 0.228 6.956404e-70</code></pre>
+<pre><code>               p_val avg_logFC pct.1 pct.2     p_val_adj
+FCGR3A 1.419346e-121  2.901285 0.969 0.047 1.946491e-117
+IFITM3 1.661439e-118  2.705380 0.975 0.057 2.278497e-114
+CFD    2.030728e-117  2.355001 0.939 0.042 2.784940e-113
+TYROBP 7.442123e-115  3.239007 1.000 0.133 1.020613e-110
+CD68   6.798458e-114  2.109985 0.920 0.038 9.323405e-110</code></pre>
 <pre class="r"><code># find markers for every cluster compared to all remaining cells, report only the positive ones
 pbmc.markers &lt;- FindAllMarkers(pbmc, 
                                test.use=&quot;wilcox&quot;,
                                only.pos = TRUE, 
                                min.pct = 0.25, 
-                               max.cells.per.ident=250,
+                               max.cells.per.ident=500,
                                random.seed=randomSeed,
                                logfc.threshold = 0.25)</code></pre>
 <pre><code>Calculating cluster 0</code></pre>
@@ -1564,26 +1597,26 @@ pbmc.markers &lt;- FindAllMarkers(pbmc,
 <pre class="r"><code>pbmc.markers %&gt;% group_by(cluster) %&gt;% top_n(n = 2, wt = avg_logFC)</code></pre>
 <pre><code># A tibble: 18 x 7
 # Groups:   cluster [9]
-      p_val avg_logFC pct.1 pct.2 p_val_adj cluster gene    
-      &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;   
- 1 1.95e-32     0.857 0.931 0.56   2.67e-28 0       LDHB    
- 2 5.26e-20     0.931 0.434 0.089  7.22e-16 0       CCR7    
- 3 5.00e-86     3.85  0.996 0.217  6.85e-82 1       S100A9  
- 4 4.26e-85     3.80  0.973 0.124  5.84e-81 1       S100A8  
- 5 5.61e-83     2.99  0.936 0.042  7.69e-79 2       CD79A   
- 6 4.47e-47     2.48  0.62  0.023  6.12e-43 2       TCL1A   
- 7 1.28e-27     0.891 0.947 0.494  1.75e-23 3       IL32    
- 8 4.69e-11     0.911 0.379 0.136  6.43e- 7 3       AQP3    
- 9 3.37e-69     2.14  0.961 0.232  4.62e-65 4       CCL5    
-10 6.18e-37     2.06  0.588 0.051  8.47e-33 4       GZMK    
-11 4.07e-69     2.28  0.969 0.135  5.59e-65 5       FCGR3A  
-12 9.40e-65     2.17  1     0.314  1.29e-60 5       LST1    
-13 5.76e-75     3.39  0.986 0.07   7.90e-71 6       GZMB    
-14 3.42e-65     3.47  0.959 0.134  4.69e-61 6       GNLY    
-15 4.20e-46     2.69  0.806 0.012  5.76e-42 7       FCER1A  
-16 1.26e-17     1.99  1     0.513  1.73e-13 7       HLA-DPB1
-17 1.68e-49     5.94  1     0.024  2.30e-45 8       PPBP    
-18 1.68e-49     5.02  1     0.01   2.30e-45 8       PF4     </code></pre>
+       p_val avg_logFC pct.1 pct.2 p_val_adj cluster gene    
+       &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt; &lt;fct&gt;   &lt;chr&gt;   
+ 1 4.29e- 68     0.857 0.931 0.56  5.88e- 64 0       LDHB    
+ 2 3.75e- 36     0.931 0.434 0.089 5.15e- 32 0       CCR7    
+ 3 1.72e-165     3.80  0.973 0.124 2.36e-161 1       S100A8  
+ 4 3.45e-165     3.85  0.996 0.217 4.73e-161 1       S100A9  
+ 5 3.57e-148     2.99  0.936 0.042 4.90e-144 2       CD79A   
+ 6 1.61e- 83     2.48  0.62  0.023 2.21e- 79 2       TCL1A   
+ 7 2.46e- 49     0.891 0.947 0.494 3.37e- 45 3       IL32    
+ 8 5.72e- 17     0.911 0.379 0.136 7.84e- 13 3       AQP3    
+ 9 2.22e-117     2.14  0.961 0.232 3.05e-113 4       CCL5    
+10 1.45e- 67     2.06  0.588 0.051 1.99e- 63 4       GZMK    
+11 3.52e- 97     2.28  0.969 0.135 4.82e- 93 5       FCGR3A  
+12 1.65e- 90     2.17  1     0.314 2.26e- 86 5       LST1    
+13 2.40e-117     3.39  0.986 0.07  3.29e-113 6       GZMB    
+14 3.49e- 95     3.47  0.959 0.134 4.79e- 91 6       GNLY    
+15 1.76e- 75     2.69  0.806 0.012 2.42e- 71 7       FCER1A  
+16 4.75e- 19     1.99  1     0.513 6.52e- 15 7       HLA-DPB1
+17 5.75e- 81     5.02  1     0.01  7.89e- 77 8       PF4     
+18 2.38e- 77     5.94  1     0.024 3.27e- 73 8       PPBP    </code></pre>
 <p>Seurat includes several tools for visualizing marker expression.</p>
 <ul>
 <li><code>VlnPlot</code> shows expression probability distributions across clusters</li>
