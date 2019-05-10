@@ -318,7 +318,7 @@ div.section {
 
 <h1 class="title toc-ignore">Single cell data analysis workshop</h1>
 <h4 class="author"><em>Jon Thompson, Pers lab</em></h4>
-<h4 class="date"><em>2019-05-10 09:26:52</em></h4>
+<h4 class="date"><em>2019-05-10 11:05:12</em></h4>
 
 </div>
 
@@ -422,10 +422,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree0b4f952b473b5653698f687b2f68ddc63337e035targetblank0b4f952a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/JonThom/190510-scWorkshop/tree/0b4f952b473b5653698f687b2f68ddc63337e035" target="_blank">0b4f952</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree7aa71e440c4c8ce056776b4bf09227aab47a6556targetblank7aa71e4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/JonThom/190510-scWorkshop/tree/7aa71e440c4c8ce056776b4bf09227aab47a6556" target="_blank">7aa71e4</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree0b4f952b473b5653698f687b2f68ddc63337e035targetblank0b4f952a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomJonThom190510scWorkshoptree7aa71e440c4c8ce056776b4bf09227aab47a6556targetblank7aa71e4a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -435,9 +435,6 @@ Untracked files:
     Untracked:  data/filtered_gene_bc_matrices/
     Untracked:  data/pbmc3k_filtered_gene_bc_matrices.tar.gz
     Untracked:  output/seu_pbmc_tutorial.rds
-
-Unstaged changes:
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -476,6 +473,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/JonThom/190510-scWorkshop/blob/7aa71e440c4c8ce056776b4bf09227aab47a6556/analysis/analysis.Rmd" target="_blank">7aa71e4</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+<td>
+wflow_publish(“./analysis/analysis.Rmd”)
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/JonThom/190510-scWorkshop/1d5ea1fcda8330d20343ca2222451609a95f5508/docs/analysis.html" target="_blank">1d5ea1f</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -758,9 +789,10 @@ set.seed(seed=randomSeed)</code></pre>
 <div id="reading-in-data" class="section level3">
 <h3>Reading in data</h3>
 <p>Seurat takes as input a gene (row) * cell (column) matrix of transcript counts.</p>
-<p>The <code>Read10X</code> function reads in the output of the <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">cellranger</a> pipeline from 10X, returning a unique molecular identified (UMI) count matrix. Seurat also provides the function <code>ReadAlevin</code> for loading the binary format matrix produced by the <a href="https://salmon.readthedocs.io/en/latest/alevin.html">Alevin tool from the Salmon software</a>.</p>
+<p>The <code>Read10X</code> function reads in the output of the <a href="https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger">cellranger</a> pipeline from 10X, returning a unique molecular identified (UMI) count matrix.</p>
+<p>Seurat also provides the function <code>ReadAlevin</code> for loading the binary format matrix produced by the <a href="https://salmon.readthedocs.io/en/latest/alevin.html">Alevin tool from the Salmon software</a>.</p>
 <ul>
-<li>Before loading the filtered matrix, you should inspect the <code>Cell Ranger</code> outputs carefully to see if the cut for calling barcodes as cells seems reasonable. If not, consider using the unfiltered matrix and filtering manually e.g. on a minimum number of RNA counts per cell.</li>
+<li>Before loading the filtered matrix, you should be confident that previous filtering steps were sound. If using <code>Cell Ranger</code>, inspect the outputs carefully to see if the cut for calling barcodes as cells seems reasonable. If not, consider using the unfiltered matrix and filtering manually e.g. on a minimum number of RNA counts per cell.</li>
 </ul>
 <pre class="r"><code># Load the PBMC dataset
 pbmc.data &lt;- Read10X(data.dir = &quot;/projects/jonatan/applied/190510-scWorkshop/data/filtered_gene_bc_matrices/hg19/&quot;)</code></pre>
@@ -801,17 +833,12 @@ LINC00115                  .              .              .</code></pre>
 </div>
 </div>
 </div>
-<div id="standard-pre-processing-workflow" class="section level1">
-<h1>Standard pre-processing workflow</h1>
-<ol style="list-style-type: decimal">
-<li>filter cells based on QC metrics</li>
-<li>normalize the raw counts</li>
-<li>identify highly variable features</li>
-<li>scale and center the data</li>
-</ol>
-<div id="select-and-filter-cells-based-on-qc-metrics" class="section level2">
-<h2>Select and filter cells based on QC metrics</h2>
-<p>Seurat allows you to easily explore QC metrics and filter cells based on <em>any</em> user-defined criteria. A few QC metrics <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4758103/">commonly used</a> by the community include</p>
+<div id="qc-and-normalization" class="section level1">
+<h1>QC and normalization</h1>
+<div id="standard-pre-processing-workflow-filter-cells-based-on-qc-metrics" class="section level2">
+<h2>Standard pre-processing workflow: filter cells based on QC metrics</h2>
+<p>Seurat allows you to easily explore QC metrics and filter cells based on <em>any</em> user-defined criteria.</p>
+<p>A few QC metrics <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4758103/">commonly used</a> by the community include</p>
 <ul>
 <li>The number of unique genes or molecules detected in each cell.
 <ul>
@@ -869,6 +896,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/JonThom/190510-scWorkshop/blob/1d5ea1fcda8330d20343ca2222451609a95f5508/docs/figure/analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">1d5ea1f</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/JonThom/190510-scWorkshop/blob/fcf3e9123afdba50085b224644448da495963e5f/docs/figure/analysis.Rmd/unnamed-chunk-9-1.png" target="_blank">fcf3e91</a>
 </td>
 <td>
@@ -911,6 +949,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/JonThom/190510-scWorkshop/blob/1d5ea1fcda8330d20343ca2222451609a95f5508/docs/figure/analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">1d5ea1f</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/JonThom/190510-scWorkshop/blob/fcf3e9123afdba50085b224644448da495963e5f/docs/figure/analysis.Rmd/unnamed-chunk-10-1.png" target="_blank">fcf3e91</a>
 </td>
 <td>
@@ -946,14 +995,13 @@ AAACCGTGTATGCG     pbmc3k        980          521 0.012244898
 AAACGCACTGGTAC     pbmc3k       2163          781 0.016643551</code></pre>
 </div>
 <div id="lognormalize-the-raw-counts" class="section level2">
-<h2>logNormalize the raw counts</h2>
+<h2>LogNormalize the raw counts</h2>
 <p>After removing unwanted cells from the dataset, the next step is to normalize the data.</p>
 <p>By default, we employ a global-scaling normalization method <code>LogNormalize</code> that</p>
 <ol style="list-style-type: decimal">
 <li>normalizes the feature expression measurements for each cell by the total number of counts within the cell and scales this by a common factor (10,000 by default) corresponding to the expected number of reads in a cell
 <ul>
 <li>assumption: differences in total number of RNA are due to more varying sampling depth than to biology.</li>
-<li>some methods for computing differential expression use raw counts</li>
 </ul></li>
 <li>adds 1 and log-transforms (natural log) the result.
 <ul>
@@ -978,16 +1026,13 @@ ZNF592        .                     .       .       </code></pre>
 <div id="identify-highly-variable-features-feature-selection" class="section level2">
 <h2>Identify highly variable features (feature selection)</h2>
 <p>We next calculate a subset of features that exhibit high cell-to-cell variation in the dataset (i.e, they are highly expressed in some cells, and lowly expressed in others). Satija et al and <a href="https://www.nature.com/articles/nmeth.2645">others</a> have found that focusing on these genes in downstream analysis helps to highlight biological signal in single-cell datasets.</p>
-<p><em>The problem is that gene expression variance tends to correlate highly with the mean expression of that gene</em></p>
+<p><em>Problem: gene expression variance tends to correlate highly with the mean expression, leading to a bias towards selecting highly expressed genes</em></p>
 <p><strong>Variance Stabilizing Transformation (vst)</strong>:</p>
 <ul>
 <li>The procedure in Seurat3 is described in detail <a href="https://www.biorxiv.org/content/early/2018/11/02/460147.full.pdf">here</a></li>
 <li>The method fits a line to the relationship of log(variance) and log(mean) across all genes using local polynomial regression (loess). Then standardizes each gene’s variance using the observed mean and expected variance (given by the fitted line). To reduce the impact of technical outliers, we clip the standardized values to a maximum value (clip.max).</li>
 <li>This method returns the number of genes requested (default 2000)</li>
 </ul>
-<!-- * **mean.var.plot**:  -->
-<!--     * First, uses a function to calculate average expression (mean.function) and dispersion (dispersion.function) for each feature. Next, divides features into num.bin (deafult 20) bins based on their average expression, and calculates z-scores for dispersion within each bin. The purpose of this is to identify variable features while controlling for the strong relationship between variability and average expression.  -->
-<!--     * A practical advantage is that this method has a hard-coded z-score cutoff, which frees the user from setting an arbitrary number of variable genes -->
 <pre class="r"><code>pbmc &lt;- FindVariableFeatures(pbmc, 
                              selection.method = &quot;vst&quot;, 
                              nfeatures = 2000)</code></pre>
@@ -1043,10 +1088,16 @@ JonThom
 </div>
 <div id="scale-and-center-the-data" class="section level2">
 <h2>Scale and center the data</h2>
-<p>Next, as a standard pre-processing step prior to dimensional reduction techniques like PCA, we center and scale each gene’s expression, * This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate.</p>
+<p>Next, as a standard pre-processing step prior to dimensional reduction techniques like PCA, we center and scale each gene’s expression</p>
+<ul>
+<li>This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate.</li>
+</ul>
 <p>In addition, the ScaleData function optionally also ‘regresses out’ effects of given confounders, such as the number of RNA molecules or the proportion of mitochrondrial RNA <a href="https://www.biorxiv.org/content/10.1101/576827v2">Hafemeister (2017)</a>. However one should proceed with caution, in case the ‘confounder’ is correlated with biological variables of interest.</p>
 <p>The results of this are stored in <code>pbmc@assays$RNA@scale.data</code></p>
-<p>Note: * Scaling only makes sense as pre-processing for Principal Component Analysis (PCA); for other analysis continue to use LogNormalized data (<code>pbmc@assays$RNA@data</code>) or raw counts (<code>pbmc@assays$RNA@counts</code>)</p>
+<p>Note:</p>
+<ul>
+<li>Scaling only makes sense as pre-processing for Principal Component Analysis (PCA); for other analysis continue to use LogNormalized data (<code>pbmc@assays$RNA@data</code>) or raw counts (<code>pbmc@assays$RNA@counts</code>)</li>
+</ul>
 <pre class="r"><code>pbmc &lt;- ScaleData(pbmc, 
                   verbose = T,
                   vars.to.regress = c(&quot;nCount_RNA&quot;, &quot;percent.mt&quot;))</code></pre>
@@ -1060,12 +1111,15 @@ S100A9     -0.8027624    -1.21493665    -0.55611741
 IGLL5      -0.1949180    -0.12315643    -0.13727433
 GNLY       -0.4260540    -0.21637331     0.85483132</code></pre>
 <ul>
-<li><strong>Contrary to the documentation</strong> (see <code>?ScaleData</code>), the function by default scales only highly variable genes</li>
+<li><em>Contrary to the documentation</em> (see <code>?ScaleData</code>), the function by default scales only highly variable genes</li>
 </ul>
 <pre class="r"><code>dim(pbmc@assays$RNA@scale.data)</code></pre>
 <pre><code>[1] 2000 2638</code></pre>
 <p>If you wish to use all genes for PCA, pass the argument <code>features = rownames(pbmc)</code></p>
 </div>
+</div>
+<div id="dimensionality-reduction-and-clustering" class="section level1">
+<h1>Dimensionality reduction and clustering</h1>
 <div id="perform-linear-dimensional-reduction" class="section level2">
 <h2>Perform linear dimensional reduction</h2>
 <p>Next we perform Principal Component Analysis (PCA) on the scaled data.</p>
@@ -1220,17 +1274,13 @@ JonThom
 <p>In <a href="http://www.cell.com/abstract/S0092-8674(15)00549-8">Macosko et al</a> the authors implemented a resampling test inspired by <a href="https://www.ncbi.nlm.nih.gov/pubmed/25336500">Chung et al, Bioinformatics (2014)</a></p>
 <p>For each gene</p>
 <ol style="list-style-type: decimal">
-<li>Randomly ‘scramble’ the gene’s scores across cells a number</li>
-<li>Calculate projected PCA loadings for these ‘scambled’ genes.</li>
-</ol>
-<p>Repeat 1 and 2 (200 times or more), then</p>
-<ol start="3" style="list-style-type: decimal">
+<li>Randomly ‘scramble’ the gene’s scores across cells and calculate projected PCA loadings for these ‘scambled’ genes. Do this many (200+) times.</li>
 <li>Compare the PCA scores for the ‘random’ genes with the observed PCA scores to obtain a p-value for each gene’s association with each principal component.</li>
 </ol>
 <pre class="r"><code># NOT RUN
 pbmc &lt;- JackStraw(pbmc, 
                   num.replicate = 100)</code></pre>
-<ol start="4" style="list-style-type: decimal">
+<ol start="3" style="list-style-type: decimal">
 <li>Use the p-values for each gene per PC to perform a proportion test comparing the number of features with a p-value below a particular threshold (score.thresh), compared with the proportion of features expected under a uniform distribution of p-values. This gives a p-value for each principal component.</li>
 </ol>
 <pre class="r"><code>pbmc &lt;- ScoreJackStraw(pbmc, 
@@ -1336,7 +1386,10 @@ JonThom
 <p>Seurat v3 applies a graph-based clustering approach, building upon initial strategies in (<a href="http://www.cell.com/abstract/S0092-8674(15)00549-8">Macosko et al</a>). Importantly, the distance metric which drives the clustering analysis (based on previously identified PCs) remains the same. However, our approach to partioning the cellular distance matrix into clusters has dramatically improved. Our approach was heavily inspired by recent manuscripts which applied graph-based clustering approaches to scRNA-seq data <a href="http://bioinformatics.oxfordjournals.org/content/early/2015/02/10/bioinformatics.btv088.abstract">SNN-Cliq, Xu and Su, Bioinformatics, 2015</a> and CyTOF data <a href="http://www.ncbi.nlm.nih.gov/pubmed/26095251">PhenoGraph, Levine et al., Cell, 2015</a>. Briefly, these methods embed cells in a graph structure - for example a K-nearest neighbor (KNN) graph, with edges drawn between cells with similar feature expression patterns, and then attempt to partition this graph into highly interconnected ‘quasi-cliques’ or ‘communities’.</p>
 <p>As in <code>PhenoGraph</code>, we first construct a KNN graph based on the euclidean distance in PCA space, and refine the edge weights between any two cells based on the shared overlap in their local neighborhoods (Jaccard similarity). This step is performed using the <code>FindNeighbors</code> function, and takes as input the previously defined dimensionality of the dataset (first 10 PCs).</p>
 <p>To cluster the cells, we next apply modularity optimization techniques such as the Louvain algorithm (default) or SLM <a href="http://dx.doi.org/10.1088/1742-5468/2008/10/P10008">SLM, Blondel et al., Journal of Statistical Mechanics</a>, to iteratively group cells together, with the goal of optimizing the standard modularity function.</p>
-<p>The <code>FindClusters</code> function, which implements this procedure, contains a <code>resolution</code> parameter that sets the ‘granularity’ of the downstream clustering, with increased values leading to a greater number of clusters. * Setting this parameter between 0.4-1.2 typically returns good results for single-cell datasets of around 3K cells. Optimal resolution often increases for larger datasets.</p>
+<p>The <code>FindClusters</code> function, which implements this procedure, contains a <code>resolution</code> parameter that sets the ‘granularity’ of the downstream clustering, with increased values leading to a greater number of clusters.</p>
+<ul>
+<li>Setting this parameter between 0.4-1.2 typically returns good results for single-cell datasets of around 3K cells. Optimal resolution often increases for larger datasets.</li>
+</ul>
 <pre class="r"><code>pbmc &lt;- FindNeighbors(pbmc, 
                       dims = 1:10) # use 10 Principal Components</code></pre>
 <pre><code>Computing nearest neighbor graph</code></pre>
@@ -1360,12 +1413,14 @@ Levels: 0 1 2 3 4 5 6 7 8</code></pre>
 </div>
 <div id="run-non-linear-dimensional-reduction-umaptsne" class="section level2">
 <h2>Run non-linear dimensional reduction (UMAP/tSNE)</h2>
-<p>Seurat offers several non-linear dimensional reduction techniques to visualize and explore these datasets, including * t-distributed Stochastic Neighbour Embedding (t-SNE) * Uniform Manifold Approximation and Projection (UMAP)</p>
+<p>Seurat offers several non-linear dimensional reduction techniques to visualize and explore these datasets, including</p>
 <ul>
-<li>As input to the UMAP and tSNE, use the same PCs as used for the clustering analysis (here, the first 10)</li>
-<li>For tSNE, the <code>perplexity</code> parameter (defaults to 30) has a large impact on the final plot. For a great discussion see <a href="https://distill.pub/2016/misread-tsne/">Watternberg et al, 2016</a></li>
-<li>As with RunPCA, specifying seed.use makes the reduction reproducible</li>
+<li>t-distributed Stochastic Neighbour Embedding (t-SNE)</li>
+<li>Uniform Manifold Approximation and Projection (UMAP)</li>
 </ul>
+<p>As input to the UMAP and tSNE, use the same PCs as used for the clustering analysis (here, the first 10)</p>
+<p>For tSNE, the <code>perplexity</code> parameter (defaults to 30) has a large impact on the final plot. For a great discussion see <a href="https://distill.pub/2016/misread-tsne/">Watternberg et al, 2016</a></p>
+<p>As with RunPCA, specifying seed.use makes the reduction reproducible</p>
 <pre class="r"><code># use tSNE because UMAP isn&#39;t installed :)
 pbmc &lt;- RunTSNE(pbmc, 
                 dims = 1:10,
@@ -1401,6 +1456,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/JonThom/190510-scWorkshop/blob/1d5ea1fcda8330d20343ca2222451609a95f5508/docs/figure/analysis.Rmd/unnamed-chunk-29-1.png" target="_blank">1d5ea1f</a>
+</td>
+<td>
+JonThom
+</td>
+<td>
+2019-05-10
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/JonThom/190510-scWorkshop/blob/fcf3e9123afdba50085b224644448da495963e5f/docs/figure/analysis.Rmd/unnamed-chunk-29-1.png" target="_blank">fcf3e91</a>
 </td>
 <td>
@@ -1415,12 +1481,21 @@ JonThom
 </div>
 </div>
 </div>
+</div>
+<div id="biological-analysis" class="section level1">
+<h1>Biological analysis</h1>
 <div id="finding-differentially-expressed-features-cluster-biomarkers" class="section level2">
 <h2>Finding differentially expressed features (cluster biomarkers)</h2>
 <p>Seurat can help you find markers that define clusters via differential expression.</p>
 <p>FindAllMarkers automates this process for all clusters, but you can also test groups of clusters vs. each other, or against all cells.</p>
 <p>Seurat has several tests for differential expression which can be set with the test.use parameter (see our <a href="http://satijalab01.nygenome.org/seurat/v3.0/de_vignette.html">DE vignette</a> for details).</p>
-<p>Note that: * By default, unless you specify otherwise <code>FindClusters</code> identifies positive <em>and negative markers</em> of a single cluster (specified in ident.1), compared to all other cells * The min.pct argument requires a feature to be detected at a minimum percentage in either of the two groups of cells * The thresh.test argument requires a feature to be differentially expressed (on average) by some amount between the two groups. * max.cells.per.ident will downsample each identity class, which can save much time</p>
+<p>Note that:</p>
+<ul>
+<li>By default, unless you specify otherwise <code>FindClusters</code> identifies positive <em>and negative markers</em> of a single cluster (specified in ident.1), compared to all other cells</li>
+<li>The min.pct argument requires a feature to be detected at a minimum percentage in either of the two groups of cells</li>
+<li>The thresh.test argument requires a feature to be differentially expressed (on average) by some amount between the two groups.</li>
+<li>max.cells.per.ident will downsample each identity class, which can save much time</li>
+</ul>
 <pre class="r"><code># find all markers of cluster 1
 cluster1.markers &lt;- FindMarkers(pbmc, 
                                 ident.1 = 1, 
@@ -1492,7 +1567,14 @@ pbmc.markers &lt;- FindAllMarkers(pbmc,
 16 1.26e-17     1.99  1     0.513  1.73e-13 7       HLA-DPB1
 17 1.68e-49     5.94  1     0.024  2.30e-45 8       PPBP    
 18 1.68e-49     5.02  1     0.01   2.30e-45 8       PF4     </code></pre>
-<p>Seurat includes several tools for visualizing marker expression. * <code>VlnPlot</code> shows expression probability distributions across clusters * <code>FeaturePlot</code> visualizes feature expression on a tSNE or PCA plot * <code>RidgePlot</code> draws a ridge plot of gene expression, metrics, PC scores, etc. * <code>CellScatter</code> creates a plot of scatter plot of features across two single cells * <code>DotPlot</code> shows average gene expression across different identity classes</p>
+<p>Seurat includes several tools for visualizing marker expression.</p>
+<ul>
+<li><code>VlnPlot</code> shows expression probability distributions across clusters</li>
+<li><code>FeaturePlot</code> visualizes feature expression on a tSNE or PCA plot</li>
+<li><code>RidgePlot</code> draws a ridge plot of gene expression, metrics, PC scores, etc.</li>
+<li><code>CellScatter</code> creates a plot of scatter plot of features across two single cells</li>
+<li><code>DotPlot</code> shows average gene expression across different identity classes</li>
+</ul>
 <pre class="r"><code>VlnPlot(pbmc, features = c(&quot;MS4A1&quot;, &quot;CD79A&quot;))</code></pre>
 <p><img src="figure/analysis.Rmd/unnamed-chunk-33-1.png" width="960" style="display: block; margin: auto;" /></p>
 <p>
@@ -1618,12 +1700,14 @@ JonThom
 </table>
 </div>
 </div>
+</div>
+</div>
+<div id="wrap-up" class="section level1">
+<h1>Wrap up</h1>
 <p>Save the final seurat object to disk</p>
 <pre class="r"><code>if (F) saveRDS(pbmc, file = &quot;../output/pbmc3k_final.rds&quot;)</code></pre>
-</div>
-</div>
-<div id="additional-material" class="section level1">
-<h1>Additional material</h1>
+<div id="additional-material" class="section level3">
+<h3>Additional material</h3>
 <p><a href="https://satijalab.org/seurat/">Satija group website</a> - for more tutorials and articles</p>
 <br>
 <p>
@@ -1686,6 +1770,7 @@ loaded via a namespace (and not attached):
 [85] ape_5.1            stringi_1.4.3      parallel_3.5.3    
 [88] Rcpp_1.0.1         png_0.1-7          tidyselect_0.2.5  
 [91] lmtest_0.9-36     </code></pre>
+</div>
 </div>
 </div>
 
